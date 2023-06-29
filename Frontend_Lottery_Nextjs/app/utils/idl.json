@@ -1,0 +1,245 @@
+{
+    "version": "0.1.0",
+    "name": "backed",
+    "instructions": [
+      {
+        "name": "initMaster",
+        "accounts": [
+          {
+            "name": "masterAccount",
+            "isMut": true,
+            "isSigner": false,
+            "pda": {
+              "seeds": [
+                {
+                  "kind": "const",
+                  "type": "string",
+                  "value": "master"
+                }
+              ]
+            }
+          },
+          {
+            "name": "user",
+            "isMut": true,
+            "isSigner": true
+          },
+          {
+            "name": "systemProgram",
+            "isMut": false,
+            "isSigner": false
+          }
+        ],
+        "args": []
+      },
+      {
+        "name": "createLottery",
+        "accounts": [
+          {
+            "name": "masterAccount",
+            "isMut": true,
+            "isSigner": false,
+            "pda": {
+              "seeds": [
+                {
+                  "kind": "const",
+                  "type": "string",
+                  "value": "master"
+                }
+              ]
+            }
+          },
+          {
+            "name": "lotteryAccount",
+            "isMut": true,
+            "isSigner": false
+          },
+          {
+            "name": "user",
+            "isMut": true,
+            "isSigner": true
+          },
+          {
+            "name": "systemProgram",
+            "isMut": false,
+            "isSigner": false
+          }
+        ],
+        "args": [
+          {
+            "name": "ticketPrice",
+            "type": "u64"
+          }
+        ]
+      },
+      {
+        "name": "buyTicket",
+        "accounts": [
+          {
+            "name": "lotteryAccount",
+            "isMut": true,
+            "isSigner": false
+          },
+          {
+            "name": "ticketAccount",
+            "isMut": true,
+            "isSigner": false
+          },
+          {
+            "name": "buyer",
+            "isMut": true,
+            "isSigner": true
+          },
+          {
+            "name": "systemProgram",
+            "isMut": false,
+            "isSigner": false
+          }
+        ],
+        "args": []
+      },
+      {
+        "name": "pickWinner",
+        "accounts": [
+          {
+            "name": "lotteryAccount",
+            "isMut": true,
+            "isSigner": false,
+            "relations": [
+              "authority"
+            ]
+          },
+          {
+            "name": "authority",
+            "isMut": true,
+            "isSigner": true
+          }
+        ],
+        "args": []
+      },
+      {
+        "name": "claimPrize",
+        "accounts": [
+          {
+            "name": "lotteryAccount",
+            "isMut": true,
+            "isSigner": false
+          },
+          {
+            "name": "ticketAccount",
+            "isMut": true,
+            "isSigner": false
+          },
+          {
+            "name": "authority",
+            "isMut": true,
+            "isSigner": true
+          },
+          {
+            "name": "systemProgram",
+            "isMut": false,
+            "isSigner": false
+          }
+        ],
+        "args": []
+      }
+    ],
+    "accounts": [
+      {
+        "name": "Master",
+        "type": {
+          "kind": "struct",
+          "fields": [
+            {
+              "name": "lastLotteryId",
+              "type": "u32"
+            }
+          ]
+        }
+      },
+      {
+        "name": "Lottery",
+        "type": {
+          "kind": "struct",
+          "fields": [
+            {
+              "name": "id",
+              "type": "u32"
+            },
+            {
+              "name": "authority",
+              "type": "publicKey"
+            },
+            {
+              "name": "ticketPrice",
+              "type": "u64"
+            },
+            {
+              "name": "lastTicketId",
+              "type": "u32"
+            },
+            {
+              "name": "winnerId",
+              "type": {
+                "option": "u32"
+              }
+            },
+            {
+              "name": "claimed",
+              "type": "bool"
+            }
+          ]
+        }
+      },
+      {
+        "name": "Ticket",
+        "type": {
+          "kind": "struct",
+          "fields": [
+            {
+              "name": "id",
+              "type": "u32"
+            },
+            {
+              "name": "buyer",
+              "type": "publicKey"
+            },
+            {
+              "name": "lotteryId",
+              "type": "u32"
+            }
+          ]
+        }
+      }
+    ],
+    "errors": [
+      {
+        "code": 6000,
+        "name": "WinnerAlreadyExists",
+        "msg": "Winner Already exist!"
+      },
+      {
+        "code": 6001,
+        "name": "NoTickets",
+        "msg": "Can't get winner, when no tickets are bought!"
+      },
+      {
+        "code": 6002,
+        "name": "WinnerNotChoosen",
+        "msg": "Winner has not been chosen."
+      },
+      {
+        "code": 6003,
+        "name": "InvalidWinner",
+        "msg": "Invalid Winner!"
+      },
+      {
+        "code": 6004,
+        "name": "AlreadyClaimed",
+        "msg": "The price has already been claimed!"
+      }
+    ],
+    "metadata": {
+      "address": "2dpGGjjwZVpVbscr5EN3tpgjbzbmyHApm4L2LGXNRGDF"
+    }
+  }
